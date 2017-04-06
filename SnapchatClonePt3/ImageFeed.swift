@@ -16,7 +16,7 @@ var threads: [String: [Post]] = ["Memes": [], "Dog Spots": [], "Random": []]
 
 
 let threadNames = ["Memes", "Dog Spots", "Random"]
-
+let threadArray = ["memes","dog", "random"]
 
 func getPostFromIndexPath(indexPath: IndexPath) -> Post? {
     let sectionName = threadNames[indexPath.section]
