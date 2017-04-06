@@ -31,9 +31,28 @@ class CurrentUser {
         Note that our database is set up to store a set of ID's under the readPosts node for each user.
         Make a query to Firebase using the 'observeSingleEvent' function (with 'of' parameter set to .value) and retrieve the snapshot that is returned. If the snapshot exists, store its value as a [String:AnyObject] dictionary and iterate through its keys, appending the value corresponding to that key to postArray each time. Finally, call completion(postArray).
     */
+    var i = Int()
     func getReadPostIDs(completion: @escaping ([String]) -> Void) {
         var postArray: [String] = []
         // TODO
+       // postArray = readPostIDs!
+        
+        //FIRAuth.auth()?.currentUser.
+        let snpshot = dbRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            self.i = 0
+            let value = snapshot.value as? NSDictionary
+            let username = value?["username"] as? String ?? ""
+            for (keys, values) in value! {
+                postArray.append((self.readPostIDs?[self.i])!)
+                self.i = self.i + 1
+            }
+            
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        completion(postArray)
     }
     
     /*
@@ -45,6 +64,11 @@ class CurrentUser {
     */
     func addNewReadPost(postID: String) {
         // TODO
+        let newChild = dbRef.childByAutoId()
+        readPostIDs?.append(newChild.key)
+        newChild.setValue(postID)
+        
+        
     }
     
 }
