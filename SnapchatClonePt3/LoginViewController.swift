@@ -9,7 +9,8 @@
 import UIKit
 import Firebase
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, UITextFieldDelegate, UIAlertController
+{
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -38,11 +39,28 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Otherwise, perform a segue to the rest of the app using the identifier "loginToMain"
      
     */
+    
     @IBAction func didAttemptLogin(_ sender: UIButton) {
         guard let emailText = emailField.text else { return }
         guard let passwordText = passwordField.text else { return }
         
         // YOUR CODE HERE
+        
+        FIRAuth.auth()?.signIn(withEmail: emailText, password: passwordText, completion: { (user, error) in
+            
+            if let error = error {
+                print(error)
+                let alertController = UIAlertController(title: "Sign in failed", message: "Try again", preferredStyle: .alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alertController.addAction(defaultAction)
+                
+                self.present(alertController, animated: true, completion: nil)
+            } else {
+                self.performSegue(withIdentifier: "loginToMain", sender: self)
+            
+        }
+    })
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
