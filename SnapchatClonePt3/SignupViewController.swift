@@ -44,19 +44,14 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
         if let error = error {
             print(error)
         } else {
+            let changeRequest = user?.profileChangeRequest()
+            changeRequest?.displayName = name
+            //let callback = FIRUserProfileChangeCallback()
+            changeRequest?.commitChanges()
             
-        }
+            }
     })
-      let changeRequest = newUser.profileChangeRequest()
-    changeRequest.displayName = name
-        changeRequest.commitChange(completion:
-            {(err) in
-                if let err = err {
-                    print(err)
-                } else {
-                    
-                }
-                })
+      
      // FIRAuth.auth()?.cha
     }
 
