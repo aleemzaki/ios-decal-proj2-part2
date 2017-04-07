@@ -48,7 +48,7 @@ class SignupViewController: UIViewController, UITextFieldDelegate {
             changeRequest?.displayName = name
             //let callback = FIRUserProfileChangeCallback()
             changeRequest?.commitChanges()
-            
+            self.performSegue(withIdentifier: "signupToMain", sender: self)
             }
     })
       

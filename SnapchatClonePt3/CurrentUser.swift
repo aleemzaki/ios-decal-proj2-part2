@@ -61,6 +61,8 @@ class CurrentUser {
         Adds a new post ID to the list of post ID's under the user's readPosts node.
         This should be fairly simple - just create a new child by auto ID under the readPosts node and set its value to the postID (string).
         Remember to be very careful about following the structure of the User node before writing any data!
+     
+     
     */
     func addNewReadPost(postID: String) {
         // TODO

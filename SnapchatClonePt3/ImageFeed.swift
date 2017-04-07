@@ -53,14 +53,30 @@ func clearThreads() {
     Finally, save the actual data to the storage module by calling the store function below.
  
     Remember, DO NOT USE ACTUAL STRING VALUES WHEN REFERENCING A PATH! YOU SHOULD ONLY USE THE CONSTANTS DEFINED IN CONSTANTS.SWIFT
-
+In the addPost function, you'll be saving the data for an image every time the user posts to a feed. Remember that a post is defined by a date, imagePath, username, and thread. The latter two are provided as parameters, and the path is already defined for you, but for the date you'll need to create a string corresponding to the current date. Create a dictionary with these parameters and pass that in as the value to a new child node in Posts. Finally, since the database doesn't store the actual image data, you should call the function to store the data separately.
 */
 func addPost(postImage: UIImage, thread: String, username: String) {
     let dbRef = FIRDatabase.database().reference()
     let data = UIImageJPEGRepresentation(postImage, 1.0)! 
     let path = "\(firStorageImagesPath)/\(UUID().uuidString)"
-    
+    //let dateString = Constants.
     // YOUR CODE HERE
+    let dateObj = DateFormatter()
+    dateObj.dateFormat = "yyyy-MM-dd HH:mm:ss.A"
+    
+    var dict_child: [String:String] = [
+        "imagePath" : path,
+        "thread" : thread,
+        "username" : username,
+        "date" : dateObj.string(from: Date())
+    ]
+    
+    
+    //var newChild = dbRef.childByAutoId()
+    //newChild.setValue(dict_child)// = dict_child
+    
+    //store(data: data, toPath path: path)
+    //readPostIDs?.append(newChild.key)
 }
 
 /*
