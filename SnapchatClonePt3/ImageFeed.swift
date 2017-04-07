@@ -72,10 +72,10 @@ func addPost(postImage: UIImage, thread: String, username: String) {
     ]
     
     
-    //var newChild = dbRef.childByAutoId()
-    //newChild.setValue(dict_child)// = dict_child
+    var newChild = dbRef.childByAutoId()
+    newChild.setValue(dict_child)// = dict_child
     
-    //store(data: data, toPath path: path)
+    store(data: data, toPath: path)
     //readPostIDs?.append(newChild.key)
 }
 
@@ -91,9 +91,12 @@ func store(data: Data, toPath path: String) {
     let storageRef = FIRStorage.storage().reference()
     
     // YOUR CODE HERE
+    storageRef.child(path).put(data, metadata: nil){ (error) in
+        print(error)
+    }
+
+
 }
-
-
 /*
     TODO:
     
@@ -131,5 +134,6 @@ func getDataFromPath(path: String, completion: @escaping (Data?) -> Void) {
         }
     }
 }
+
 
 
