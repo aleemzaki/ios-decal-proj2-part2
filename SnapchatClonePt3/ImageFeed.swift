@@ -114,11 +114,32 @@ func store(data: Data, toPath path: String) {
  
     Remember to use constants defined in Constants.swift to refer to the correct path!
  */
+var k = Int()
 func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
     let dbRef = FIRDatabase.database().reference()
     var postArray: [Post] = []
     
     // YOUR CODE HERE
+    //dbRef.observeSingleEvent(of: .value, with: snapshot)
+    let snpshot = dbRef.observeSingleEvent(of: .value, with: { (snapshot) in
+        // Get user value
+        k = 0
+        let value = snapshot.value as? NSDictionary
+       // snapshot.key = postId
+        let username = value?["username"] as? String ?? ""
+        //let imagePath = value?["username"] as? String ?? ""
+        for (keys, values) in value! {
+            let newPost = Post.init(id: keys as! String, username: username, postImagePath:, thread: <#T##String#>, dateString: <#T##String#>, read: <#T##Bool#>)
+            //napshot.key = "h"
+            postArray.append(newPost)
+            k = k + 1
+        }
+        
+        // ...
+    }) { (error) in
+        print(error.localizedDescription)
+    }
+    completion(postArray)
 }
 
 func getDataFromPath(path: String, completion: @escaping (Data?) -> Void) {
