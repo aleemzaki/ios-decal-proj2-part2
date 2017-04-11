@@ -134,9 +134,9 @@ func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
         for (keys, values) in value! {
             //CurrentUser.getReadPostIDs(CurrentUser)
             //if (keys==)
-            let readbool = false
-            for postid in user.getReadPostIDs(completion: postArray) {
-                if (postid == keys) {
+            var readbool = false
+            for postid in user.readPostIDs!{// .getReadPostIDs(completion: ) {
+                if (postid == keys as! String) {
                     readbool = true
                 }
             }
