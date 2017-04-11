@@ -52,6 +52,7 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     */
     override func viewWillAppear(_ animated: Bool) {
         // YOUR CODE HERE
+        awakeFromNib()
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,7 +73,7 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     */
     func updateData() {
         var newPostArray: [Post] = []
-        var postpic = Data()
+        //var postpic = Data()
         getPosts(user: currentUser, completion: {postsArray in
             newPostArray = postsArray!
             //postsArray.
@@ -80,13 +81,17 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
             for thispost in postsArray! {
                 addPostToThread(post: thispost)
                 getDataFromPath(path: thispost.postImagePath, completion: {postpic in
-                    loadedImagesById[thispost.postId] = postpic
+                    let imageconvert : UIImage = UIImage(data: postpic!)!
+                    self.loadedImagesById[thispost.postId] = imageconvert
+                    
+                    
+                    
                     
                 })
             }
         })
         
-        
+        reloadInputViews()
         // YOUR CODE HERE
     }
     
