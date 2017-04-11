@@ -71,6 +71,22 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
      
     */
     func updateData() {
+        var newPostArray: [Post] = []
+        var postpic = Data()
+        getPosts(user: currentUser, completion: {postsArray in
+            newPostArray = postsArray!
+            //postsArray.
+            clearThreads()
+            for thispost in postsArray! {
+                addPostToThread(post: thispost)
+                getDataFromPath(path: thispost.postImagePath, completion: {postpic in
+                    loadedImagesById[thispost.postId] = postpic
+                    
+                })
+            }
+        })
+        
+        
         // YOUR CODE HERE
     }
     

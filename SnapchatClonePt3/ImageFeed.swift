@@ -148,6 +148,7 @@ func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
         
         // ...
     }) { (error) in
+        completion(nil)
         print(error.localizedDescription)
     }
     completion(postArray)
