@@ -127,9 +127,20 @@ func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
         let value = snapshot.value as? NSDictionary
        // snapshot.key = postId
         let username = value?["username"] as? String ?? ""
-        //let imagePath = value?["username"] as? String ?? ""
+        let imagePath = value?["postImagePath"] as? String ?? ""
+        let postthread = value?["thread"] as? String ?? ""
+        let postdate = value?["date"] as? String ?? ""
+        //let readbool =
         for (keys, values) in value! {
-            let newPost = Post.init(id: keys as! String, username: username, postImagePath:, thread: <#T##String#>, dateString: <#T##String#>, read: <#T##Bool#>)
+            //CurrentUser.getReadPostIDs(CurrentUser)
+            //if (keys==)
+            let readbool = false
+            for postid in user.getReadPostIDs(completion: postArray) {
+                if (postid == keys) {
+                    readbool = true
+                }
+            }
+            let newPost = Post.init(id: keys as! String, username: username, postImagePath: imagePath, thread: postthread, dateString: postdate, read: readbool)
             //napshot.key = "h"
             postArray.append(newPost)
             k = k + 1
