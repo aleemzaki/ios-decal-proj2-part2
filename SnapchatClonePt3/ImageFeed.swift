@@ -71,8 +71,10 @@ func addPost(postImage: UIImage, thread: String, username: String) {
         "date" : dateObj.string(from: Date())
     ]
     
+    dbRef.child(firStorageImagesPath)
     
     var newChild = dbRef.childByAutoId()
+    
     newChild.setValue(dict_child)// = dict_child
     
     store(data: data, toPath: path)
@@ -121,37 +123,57 @@ func getPosts(user: CurrentUser, completion: @escaping ([Post]?) -> Void) {
     
     // YOUR CODE HERE
     //dbRef.observeSingleEvent(of: .value, with: snapshot)
-    let snpshot = dbRef.observeSingleEvent(of: .value, with: { (snapshot) in
+    //dbRef.child(firPostsNode).//observeSing
+    dbRef.child(firPostsNode).observeSingleEvent(of: .value, with: { (snapshot) in
         // Get user value
         k = 0
-        let value = snapshot.value as? NSDictionary
+        //let value = [String:AnyObject]//snapshot.value as? NSDictionary
+       let value =  snapshot.value as! [String:AnyObject]
        // snapshot.key = postId
-        let username = value?["username"] as? String ?? ""
-        let imagePath = value?["postImagePath"] as? String ?? ""
-        let postthread = value?["thread"] as? String ?? ""
-        let postdate = value?["date"] as? String ?? ""
-        //let readbool =
-        for (keys, values) in value! {
+       //let readbool =
+        for (keys, values) in value {
             //CurrentUser.getReadPostIDs(CurrentUser)
             //if (keys==)
+            
+            
+            
+            let username = values["username"] as? String ?? ""
+            let imagePath = values["imagePath"] as? String ?? ""
+            let postthread = values["thread"] as? String ?? ""
+            let postdate = values["date"] as? String ?? ""
+            
             var readbool = false
-            for postid in user.readPostIDs!{// .getReadPostIDs(completion: ) {
-                if (postid == keys as! String) {
-                    readbool = true
+            user.getReadPostIDs(completion: { (listOfReadPosts) in
+                for postRead in listOfReadPosts {
+                    if (postRead == keys) {
+                            readbool = true
+                    }
                 }
-            }
-            let newPost = Post.init(id: keys as! String, username: username, postImagePath: imagePath, thread: postthread, dateString: postdate, read: readbool)
-            //napshot.key = "h"
-            postArray.append(newPost)
-            k = k + 1
-        }
+                let newPost = Post.init(id: keys as! String, username: username, postImagePath: imagePath, thread: postthread, dateString: postdate, read: readbool)
+                readbool = false
+                postArray.append(newPost)
+                completion(postArray)
+            })
+            
+            
+                
+        //}
         
+            //napshot.key = "h"
+    //}
+            
+            k = k + 1
+    }
+    })
+        //completion(postArray)
         // ...
-    }) { (error) in
+        
+        
+         { (error) in
         completion(nil)
         print(error.localizedDescription)
-    }
-    completion(postArray)
+        }
+
 }
 
 func getDataFromPath(path: String, completion: @escaping (Data?) -> Void) {

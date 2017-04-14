@@ -38,21 +38,28 @@ class CurrentUser {
        // postArray = readPostIDs!
         
         //FIRAuth.auth()?.currentUser.
-        let snpshot = dbRef.observeSingleEvent(of: .value, with: { (snapshot) in
+
+        dbRef.child(firUsersNode).child(self.id).child(firReadPostsNode).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             self.i = 0
-            let value = snapshot.value as? NSDictionary
-            let username = value?["username"] as? String ?? ""
-            for (keys, values) in value! {
-                postArray.append((self.readPostIDs?[self.i])!)
-                self.i = self.i + 1
-            }
+            if snapshot.exists() {
+            let value = snapshot.value as? [String:AnyObject]
             
+            //let username = value?["username"] as? String ?? ""
+            postArray = []
+            for (keys, values) in value! {
+                
+                postArray.append(values as! String)
+               // self.i = self.i + 1
+            }
+            completion(postArray)
+            }
             // ...
         }) { (error) in
             print(error.localizedDescription)
         }
         completion(postArray)
+        
     }
     
     /*
@@ -66,8 +73,7 @@ class CurrentUser {
     */
     func addNewReadPost(postID: String) {
         // TODO
-        let newChild = dbRef.childByAutoId()
-        readPostIDs?.append(newChild.key)
+        let newChild = dbRef.child(firUsersNode).child(self.id).child(firReadPostsNode).childByAutoId()
         newChild.setValue(postID)
         
         

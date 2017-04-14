@@ -52,7 +52,9 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
     */
     override func viewWillAppear(_ animated: Bool) {
         // YOUR CODE HERE
-        awakeFromNib()
+        //awakeFromNib()
+        updateData()
+        //postTableView.updateD
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,18 +82,15 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
             clearThreads()
             for thispost in postsArray! {
                 addPostToThread(post: thispost)
-                getDataFromPath(path: thispost.postImagePath, completion: {postpic in
-                    let imageconvert : UIImage = UIImage(data: postpic!)!
-                    self.loadedImagesById[thispost.postId] = imageconvert
-                    
-                    
-                    
-                    
-                })
+                
+                
             }
+            self.postTableView.reloadData()
+           // self.
         })
         
-        reloadInputViews()
+        //reloadInputViews()
+        
         // YOUR CODE HERE
     }
     
@@ -166,7 +165,20 @@ class PostsTableViewController: UIViewController, UITableViewDelegate, UITableVi
             post.read = true
             
             // YOUR CODE HERE
-            
+            if (post.postImagePath != nil) && (!post.postImagePath.isEmpty){
+            getDataFromPath(path: post.postImagePath, completion: {postpic in
+                if postpic != nil {
+                let imageconvert : UIImage = UIImage(data: postpic!)!
+                self.loadedImagesById[post.postId] = imageconvert
+                
+                }
+                
+                
+                
+                
+            })
+            }
+            currentUser.addNewReadPost(postID: post.postId)
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
      
